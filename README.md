@@ -32,25 +32,25 @@ and the purpose of the application.
 
 ### 1. Splash Screen
 
-C:\Users\Administrator
+ChristoffelMenuApp/screenshots/Home.jpeg
 
 ---
 
 ### 2. Login / Sign In
 
-![Login Screen](screenshots/login.png)
+ChristoffelMenuApp/screenshots/LoginSignin.jpeg
 
 ---
 
 ### 3. Sign In Page
 
-![Sign In Page](screenshots/sign-in.png)
+ChristoffelMenuApp/screenshots/SigiIn.jpeg
 
 ---
 
 ### 4. Home Dashboard
 
-![Home Dashboard](screenshots/home-dashboard.png)
+ChristoffelMenuApp/screenshots/HomeDashBoard.jpeg
 
 ---
 
@@ -58,37 +58,33 @@ C:\Users\Administrator
 
 ### Appetizers
 
-![Appetizers](screenshots/appetizers.png)
+ChristoffelMenuApp/screenshots/Addappetizer.jpeg
 
 ### Entrees
 
-![Entrees](screenshots/entrees.png)
+ChristoffelMenuApp/screenshots/AddedChakalaka.jpeg
 
 ### Desserts
 
-![Desserts](screenshots/desserts.png)
+ChristoffelMenuApp/screenshots/Full Menu.jpeg
 
 ### Drinks
 
-![Drinks](screenshots/drinks.png)
+ChristoffelMenuApp/screenshots/Full Menu.jpeg
 
 ---
 
 ## 👤 User Profile
 
-### Profile Page
-
-![Profile Page](screenshots/profile.png)
-
 ### Account Details
 
-![Account Details](screenshots/account-details.png)
+ChristoffelMenuApp/screenshots/Account.jpeg
 
 ---
 
 ## 🛒 Order Ingredients
 
-![Order Ingredients](screenshots/order-ingredients.png)
+ChristoffelMenuApp/screenshots/Ingredients.jpeg
 
 ---
 
