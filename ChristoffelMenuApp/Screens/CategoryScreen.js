@@ -352,31 +352,38 @@ export default function CategoryScreen({ navigation, route }) {
               Choose the dish you want to manage.
             </Text>
 
-            {items.map((item) => (
-              <TouchableOpacity
-                key={item.id}
-                style={styles.selectionItem}
-                onPress={() => handleItemSelected(item)}
-              >
-                <View style={styles.selectionInformation}>
+           
+<ScrollView
+  style={{ flexGrow: 0, flexShrink: 1, maxHeight: 450 }}
+  nestedScrollEnabled={true}
+  showsVerticalScrollIndicator={true}
+  keyboardShouldPersistTaps="handled"
+>
+  {items.map((item) => (
+    <TouchableOpacity
+      key={item.id}
+      style={styles.selectionItem}
+      onPress={() => handleItemSelected(item)}
+    >
+      <View style={styles.selectionInformation}>
+        <Text style={styles.selectionName}>
+          {item.dishName}
+        </Text>
 
-                  <Text style={styles.selectionName}>
-                    {item.dishName}
-                  </Text>
+        <Text style={styles.selectionPrice}>
+          R{Number(item.price).toFixed(2)}
+        </Text>
+      </View>
 
-                  <Text style={styles.selectionPrice}>
-                    R{Number(item.price).toFixed(2)}
-                  </Text>
+      <Ionicons
+        name="chevron-forward"
+        size={19}
+        color={colors.gold}
+      />
+    </TouchableOpacity>
+  ))}
+</ScrollView>
 
-                </View>
-
-                <Ionicons
-                  name="chevron-forward"
-                  size={19}
-                  color={colors.gold}
-                />
-              </TouchableOpacity>
-            ))}
 
           </Pressable>
         </Pressable>

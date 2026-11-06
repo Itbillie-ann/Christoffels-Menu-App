@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+
+import React, { useState, useEffect } from 'react';
 
 import {
   View,
@@ -11,9 +12,11 @@ import {
   Alert,
 } from 'react-native';
 
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Ionicons } from '@expo/vector-icons';
-
 import Toolbar from '../Components/Toolbar';
+
+const PROFILE_STORAGE_KEY = '@christoffels_profile';
 
 const colors = {
   beige: '#B49A78',
@@ -33,23 +36,43 @@ export default function ProfileScreen({ navigation }) {
 
   const [editVisible, setEditVisible] = useState(false);
 
-  const [editName, setEditName] = useState(name);
-  const [editEmail, setEditEmail] = useState(email);
-  const [editPhone, setEditPhone] = useState(
-    phone === 'Not added' ? '' : phone
-  );
+  const [editName, setEditName] = useState('Christoffel User');
+  const [editEmail, setEditEmail] = useState('user@example.com');
+  const [editPhone, setEditPhone] = useState('');
+
+  // Load saved profile details when the screen opens
+  useEffect(() => {
+    const loadProfile = async () => {
+      try {
+        const savedProfile = await AsyncStorage.getItem(
+          PROFILE_STORAGE_KEY
+        );
+
+        if (savedProfile !== null) {
+          const profile = JSON.parse(savedProfile);
+
+          setName(profile.name || 'Christoffel User');
+          setEmail(profile.email || 'user@example.com');
+          setPhone(profile.phone || 'Not added');
+        }
+      } catch (error) {
+        console.log('Error loading profile:', error);
+      }
+    };
+
+    loadProfile();
+  }, []);
 
   const openEditProfile = () => {
     setEditName(name);
     setEditEmail(email);
-    setEditPhone(
-      phone === 'Not added' ? '' : phone
-    );
+    setEditPhone(phone === 'Not added' ? '' : phone);
 
     setEditVisible(true);
   };
 
-  const saveProfile = () => {
+  // Save profile details permanently
+  const saveProfile = async () => {
     if (!editName.trim()) {
       Alert.alert(
         'Name Required',
@@ -66,20 +89,36 @@ export default function ProfileScreen({ navigation }) {
       return;
     }
 
-    setName(editName.trim());
-    setEmail(editEmail.trim());
-    setPhone(
-      editPhone.trim()
-        ? editPhone.trim()
-        : 'Not added'
-    );
+    const updatedProfile = {
+      name: editName.trim(),
+      email: editEmail.trim(),
+      phone: editPhone.trim() || 'Not added',
+    };
 
-    setEditVisible(false);
+    try {
+      await AsyncStorage.setItem(
+        PROFILE_STORAGE_KEY,
+        JSON.stringify(updatedProfile)
+      );
 
-    Alert.alert(
-      'Profile Updated',
-      'Your profile has been updated successfully.'
-    );
+      setName(updatedProfile.name);
+      setEmail(updatedProfile.email);
+      setPhone(updatedProfile.phone);
+
+      setEditVisible(false);
+
+      Alert.alert(
+        'Profile Updated',
+        'Your profile has been updated successfully.'
+      );
+    } catch (error) {
+      console.log('Error saving profile:', error);
+
+      Alert.alert(
+        'Error',
+        'Your profile could not be saved.'
+      );
+    }
   };
 
   return (
@@ -119,13 +158,8 @@ export default function ProfileScreen({ navigation }) {
             />
 
             <View style={styles.info}>
-              <Text style={styles.label}>
-                Name
-              </Text>
-
-              <Text style={styles.value}>
-                {name}
-              </Text>
+              <Text style={styles.label}>Name</Text>
+              <Text style={styles.value}>{name}</Text>
             </View>
           </View>
 
@@ -139,13 +173,8 @@ export default function ProfileScreen({ navigation }) {
             />
 
             <View style={styles.info}>
-              <Text style={styles.label}>
-                Email
-              </Text>
-
-              <Text style={styles.value}>
-                {email}
-              </Text>
+              <Text style={styles.label}>Email</Text>
+              <Text style={styles.value}>{email}</Text>
             </View>
           </View>
 
@@ -159,13 +188,8 @@ export default function ProfileScreen({ navigation }) {
             />
 
             <View style={styles.info}>
-              <Text style={styles.label}>
-                Phone
-              </Text>
-
-              <Text style={styles.value}>
-                {phone}
-              </Text>
+              <Text style={styles.label}>Phone</Text>
+              <Text style={styles.value}>{phone}</Text>
             </View>
           </View>
         </View>
@@ -192,9 +216,7 @@ export default function ProfileScreen({ navigation }) {
         visible={editVisible}
         transparent
         animationType="fade"
-        onRequestClose={() =>
-          setEditVisible(false)
-        }
+        onRequestClose={() => setEditVisible(false)}
       >
         <View style={styles.modalOverlay}>
           <View style={styles.modalCard}>
@@ -204,9 +226,7 @@ export default function ProfileScreen({ navigation }) {
               </Text>
 
               <TouchableOpacity
-                onPress={() =>
-                  setEditVisible(false)
-                }
+                onPress={() => setEditVisible(false)}
               >
                 <Ionicons
                   name="close"
@@ -216,9 +236,7 @@ export default function ProfileScreen({ navigation }) {
               </TouchableOpacity>
             </View>
 
-            <Text style={styles.inputLabel}>
-              Name
-            </Text>
+            <Text style={styles.inputLabel}>Name</Text>
 
             <TextInput
               style={styles.input}
@@ -228,9 +246,7 @@ export default function ProfileScreen({ navigation }) {
               placeholderTextColor="#9A8975"
             />
 
-            <Text style={styles.inputLabel}>
-              Email
-            </Text>
+            <Text style={styles.inputLabel}>Email</Text>
 
             <TextInput
               style={styles.input}
@@ -242,9 +258,7 @@ export default function ProfileScreen({ navigation }) {
               autoCapitalize="none"
             />
 
-            <Text style={styles.inputLabel}>
-              Phone
-            </Text>
+            <Text style={styles.inputLabel}>Phone</Text>
 
             <TextInput
               style={styles.input}

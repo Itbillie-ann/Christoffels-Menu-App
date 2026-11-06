@@ -54,36 +54,26 @@ export default function HomeScreen({ navigation }) {
   // -----------------------------------
 
   useEffect(() => {
-    const backAction = () => {
-      if (navigation.canGoBack()) {
-        navigation.goBack();
-      } else {
-        confirmExit();
-      }
+  const backAction = () => {
+    confirmExit();
+    return true;
+  };
 
-      return true;
-    };
+  const backHandler = BackHandler.addEventListener(
+    'hardwareBackPress',
+    backAction
+  );
 
-    const backHandler =
-      BackHandler.addEventListener(
-        'hardwareBackPress',
-        backAction
-      );
-
-    return () => backHandler.remove();
-  }, [navigation]);
+  return () => backHandler.remove();
+}, []);
 
   // -----------------------------------
   // HEADER BACK BUTTON
   // -----------------------------------
 
-  const handleBackPress = () => {
-    if (navigation.canGoBack()) {
-      navigation.goBack();
-    } else {
-      confirmExit();
-    }
-  };
+const handleBackPress = () => {
+  confirmExit();
+};
 
   // -----------------------------------
   // CLOSE MORE MENU
