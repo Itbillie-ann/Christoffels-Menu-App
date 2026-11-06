@@ -1,83 +1,109 @@
-# Chef's Menu Manager
+# Christoffel's Menu App
 
-A React Native (Expo) mobile app that lets Christoffel, a private chef, manage the dishes on his menu. This is the final Portfolio of Evidence (PoE) submission for MAST5112 and builds on the Part 2 version of the same project.
+A React Native (Expo) mobile application that allows users to browse and manage Christoffel's restaurant menu, update account information, manage profile details and interact with the food ordering screen.
 
-**Student:** Alicia B. Bukitu (ST10538583)
-**Lecturer:** Wellcome Zaranyika
-**Submission date:** 06 November 2026
+**Project:** Christoffel's Menu App  
+**Platform:** React Native (Expo)  
+**Language:** JavaScript
 
 ## Features
 
-- **Add menu items** with a dish name, description, course (Starter, Main Course or Dessert) and price.
-- **Edit and delete menu items.** Edit opens the same form, pre-filled. Delete asks for confirmation first. Every change shows on the Menu and Home screens straight away.
-- **Search by dish name** and **filter by course**. Search and filter can be combined, and one tap clears both.
-- **Menu statistics** on the Home screen: total number of items, the average price of all items, and the number of items (with their average price) in each course.
-- **Validation and feedback**: inline error messages, success messages after adding, updating and deleting, and helpful empty states.
+- **Add menu items** with the relevant dish information. 
+- **Edit menu items** so existing menu information can be updated.
+- **Browse menu categories** and view available dishes.
+- **Menu data persistence:** menu changes are saved locally using AsyncStorage and remain available after the app is restarted.
+- **Profile management:** view and update profile information, with details saved locally.
+- **Account details:** view and edit account information.
+- **Payment methods:** add and manage displayed payment-method information. This is a demonstration feature and does not process real payments.
+- **Food ordering:** browse ingredient options and submit an ingredient order.
+- **Navigation and exit confirmation:** navigate between the app's screens and confirm before leaving the app.
 
 ## Running the app
 
-Requires Node.js. From the project folder:
+Requires Node.js, npm and Expo Go.
 
-```
+From the project folder:
+
+```bash
+cd ChristoffelMenuApp
 npm install
 npx expo start
 ```
 
-Scan the QR code with the Expo Go app on your phone, or press `a` to open an Android emulator.
+Scan the QR code using the Expo Go app on your phone, or use an Android emulator.
 
-Menu items are held in memory while the app is open, so they reset when the app is fully closed.
+## Data storage
+
+The app uses `@react-native-async-storage/async-storage` to store selected information locally on the device.
+
+- Menu information is saved locally.
+- Profile information is saved locally.
+- Local storage allows saved information to remain available after the app is closed and reopened.
+
+This is local device storage, not an online database. Data is not automatically synchronised between devices.
 
 ## Project structure
 
-```
-App.js                  Navigation setup and app providers
-constants/theme.js      Colours, spacing, corner radii and the course list
-context/MenuContext.js  Shared menu data: add, update and delete functions
-utils/                  Validation, search/filter, statistics, price formatting, alerts
-components/             Reusable interface pieces (buttons, form fields, cards, search bar...)
-screens/                Splash, Home, Menu and Menu Form screens
+```text
+Christoffels-Menu-App/
+│
+├── ChristoffelMenuApp/
+│   ├── assets/                 App icons and image assets
+│   ├── Screens/
+│   │   ├── Account/            Profile, account details and payment methods
+│   │   ├── Components/         Reusable interface components
+│   │   ├── Context/             Shared menu data and state management
+│   │   └── Orders/              Food ordering screen
+│   │
+│   ├── screenshots/            Application screenshots
+│   ├── App.js                   Navigation and app setup
+│   ├── app.json                 Expo configuration
+│   ├── index.js                 Application entry point
+│   ├── package.json             Project dependencies and scripts
+│   └── theme.js                 App theme and styling values
+│
+└── README.md
 ```
 
 ## Change log
 
-All changes since the Part 2 submission.
+Improvements and updates made to the application.
 
 ### Added
 
-- Edit and update an existing menu item (Menu Form screen, opened from the Edit button on a menu card).
-- Delete a menu item, with a confirmation prompt and a success message.
-- Search for a menu item by name (not case-sensitive, partial matches allowed) with a clear (x) button.
-- Filter by course using All, Starter, Main Course and Dessert buttons.
-- "Clear search and filter" link, plus a "Showing X of Y items" count.
-- Menu statistics on the Home screen: total items, average price, and the count and average price per course.
-- Back button on the Menu and Menu Form screens so navigation between features is clear.
-- Duplicate check: the same dish name cannot be added twice within one course.
-- Empty states for an empty menu and for a search or filter with no results.
+- Local data persistence for menu items using AsyncStorage.
+- Profile information storage so profile details remain available after restarting the app.
+- Account details editing interface.
+- Payment methods management interface.
+- Improved menu item management.
+- Ingredient ordering functionality.
+- Confirmation prompts when leaving the application.
 
 ### Changed
 
-- `AddMenuItemScreen` was replaced by `MenuFormScreen`, which handles both adding and editing.
-- The Home screen now shows the full statistics panel instead of a single item count, and is titled "Chef's Menu Manager".
-- The Menu screen now has Edit and Delete buttons on every item and an Add Menu Item button.
-- Validation is stricter: names and descriptions need a minimum length, and the price must be a positive number with at most two decimals. Error messages clear as soon as the chef starts correcting the field.
-- Success messages now appear after adding, updating and deleting (Part 2 only confirmed adding).
-- The price field uses the decimal keypad instead of the numeric keypad.
-- Item IDs are now a timestamp plus a random suffix to avoid two items sharing an ID.
-- Fixed top padding was replaced by safe-area handling so content is not hidden behind the phone's status bar.
+- Updated the menu context to support saving menu data locally.
+- Improved the category screen to make selecting and browsing dishes easier.
+- Updated the profile screen to load and save information using AsyncStorage.
+- Improved navigation between the app's screens.
+- Updated project dependencies to support the new functionality.
 
-### Refactoring
+### Bug fixes and improvements
 
-- Colours, spacing and the course list moved out of individual screens into `constants/theme.js`, so the look is changed in one place.
-- Repeated interface code was extracted into reusable components: `AppButton`, `FormField`, `ScreenHeader`, `Screen`, `SearchBar`, `CourseFilter`, `MenuItemCard`, `StatCard`, `StatsPanel` and `EmptyState`.
-- Logic was moved out of the screens into small reusable functions: `validateMenuItem`, `filterMenuItems`, `calculateStats`, `formatPrice`, `showMessage` and `confirmAction`.
-- `MenuContext` now provides `updateMenuItem` and `deleteMenuItem`, and `useMenu` reports a clear error if it is used outside the provider.
-- Variable, function and component names were reviewed so each describes what it does.
-
-### Bug fixes
-
-- The Part 2 price check used `isNaN(parseFloat(...))`, which accepted entries such as `12abc`. Prices are now checked against a strict pattern.
-- `Alert.alert` does nothing when the app runs in a browser. `showMessage` and `confirmAction` use the browser dialogs on the web so confirmations still work.
+- Fixed menu data resetting after restarting the application.
+- Improved profile data persistence.
+- Fixed the category selection scrolling experience.
+- Improved the exit confirmation behaviour.
+- Improved the overall usability of the application.
 
 ## Technologies
 
-React Native, Expo, React Navigation (native stack), `@react-native-picker/picker`.
+- **React Native** – Mobile application framework.
+- **Expo** – Development and testing environment.
+- **JavaScript** – Application programming language.
+- **React Navigation** – Screen navigation.
+- **AsyncStorage** – Local device data persistence.
+- **Ionicons** – Application icons.
+
+## Important note
+
+This application is a demonstration project. Payment methods are for display and demonstration purposes only. Do not enter real payment-card information.
